@@ -1,10 +1,7 @@
 package com.example.uberreviewservice.models;
 
 import com.example.uberreviewservice.enums.BookingStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -28,4 +25,9 @@ public class Booking extends BaseModel {
 
     private long totalDistance;
 
+    @ManyToOne // Many bookings can have same driver
+    private Driver driver;
+
+    @ManyToOne // Many bookings can have same passenger
+    private Passenger passenger;
 }
