@@ -9,7 +9,8 @@ import lombok.*;
 @NoArgsConstructor // Generates a constructor with zero arguments.
 @AllArgsConstructor // Generates a constructor with all fields as parameters.
 @Entity
-@Table(name = "bookingreview")
+@Table(name = "booking_review")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Review extends BaseModel {
     @Column(nullable = false)
     private String content;
