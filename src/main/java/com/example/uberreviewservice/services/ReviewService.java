@@ -1,24 +1,27 @@
 package com.example.uberreviewservice.services;
 
-import com.example.uberreviewservice.enums.BookingStatus;
 import com.example.uberreviewservice.models.Booking;
-import com.example.uberreviewservice.models.Review;
+import com.example.uberreviewservice.models.Driver;
 import com.example.uberreviewservice.repositories.BookingRepository;
+import com.example.uberreviewservice.repositories.DriverRepository;
 import com.example.uberreviewservice.repositories.ReviewRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService implements CommandLineRunner {
     private final ReviewRepository reviewRepository;
     private final BookingRepository bookingRepository;
+    private final DriverRepository driverRepository;
 
-    public ReviewService(ReviewRepository reviewRepository, BookingRepository bookingRepository) {
+    public ReviewService(ReviewRepository reviewRepository, BookingRepository bookingRepository, DriverRepository driverRepository) {
         this.reviewRepository = reviewRepository;
         this.bookingRepository = bookingRepository;
+        this.driverRepository = driverRepository;
     }
 
     @Override
@@ -39,5 +42,11 @@ public class ReviewService implements CommandLineRunner {
         reviewRepository.save(r);
         bookingRepository.save(b);
         */
+        Optional<Driver> driver = driverRepository.findByIdAndLicenseNumber(1L, "DL121212");
+        if (driver.isPresent()) {
+            System.out.println(driver.get().getName());
+            List<Booking> bookings = driver.get().getBookings();
+            for (Booking booking : bookings) System.out.println(booking.getId());
+        }
     }
 }
