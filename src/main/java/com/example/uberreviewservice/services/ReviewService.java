@@ -1,32 +1,49 @@
 package com.example.uberreviewservice.services;
 
-import com.example.uberreviewservice.models.Booking;
-import com.example.uberreviewservice.models.Driver;
-import com.example.uberreviewservice.repositories.BookingRepository;
-import com.example.uberreviewservice.repositories.DriverRepository;
+import com.example.uberreviewservice.models.Review;
 import com.example.uberreviewservice.repositories.ReviewRepository;
-import org.jspecify.annotations.NonNull;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ReviewService implements CommandLineRunner {
+public class ReviewService implements IReviewService {
     private final ReviewRepository reviewRepository;
-    private final BookingRepository bookingRepository;
-    private final DriverRepository driverRepository;
 
-    public ReviewService(ReviewRepository reviewRepository, BookingRepository bookingRepository, DriverRepository driverRepository) {
+    public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
-        this.bookingRepository = bookingRepository;
-        this.driverRepository = driverRepository;
     }
 
     @Override
-    public void run(String @NonNull ... args) throws Exception {
-        List<Driver> drivers = driverRepository.findAllByIdIn(List.of(1L, 2L, 3L, 4L, 5L));
-        List<Booking> bookings = bookingRepository.findAllByDriverIn(drivers);
-        for (Booking booking : bookings) System.out.println(booking.getId());
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
+    @Override
+    public void createReview(Review review) {
+        reviewRepository.save(review);
+    }
+
+    @Override
+    public Optional<Review> getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId);
+    }
+
+    @Override
+    public boolean deleteReviewById(Long reviewId) {
+        if (!reviewRepository.existsById(reviewId)) return false;
+
+        reviewRepository.deleteById(reviewId);
+        return true;
+    }
+
+    @Override
+    public boolean updateReviewById(Long reviewId, Review review) {
+        if (!reviewRepository.existsById(reviewId)) return false;
+
+        review.setId(reviewId); // Ensure the ID matches the path variable
+        reviewRepository.save(review);
+        return true;
     }
 }
