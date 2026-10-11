@@ -1,5 +1,6 @@
 package com.example.uberreviewservice.controllers;
 
+import com.example.uberreviewservice.adapters.CreateReviewDtoToReviewAdaptor;
 import com.example.uberreviewservice.dtos.CreateReviewDTO;
 import com.example.uberreviewservice.models.Review;
 import com.example.uberreviewservice.services.IReviewService;
@@ -14,9 +15,11 @@ import java.util.Optional;
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
     private final IReviewService reviewService;
+    private final CreateReviewDtoToReviewAdaptor createReviewDtoToReviewAdaptor;
 
-    public ReviewController(IReviewService reviewService) {
+    public ReviewController(IReviewService reviewService, CreateReviewDtoToReviewAdaptor createReviewDtoToReviewAdaptor) {
         this.reviewService = reviewService;
+        this.createReviewDtoToReviewAdaptor = createReviewDtoToReviewAdaptor;
     }
 
     @GetMapping("")
@@ -28,7 +31,8 @@ public class ReviewController {
     @PostMapping("")
     public ResponseEntity<?> createReview(@RequestBody CreateReviewDTO dto) {
         try {
-            Review review = reviewService.createReview(dto);
+            Review review = createReviewDtoToReviewAdaptor.convertDTO(dto);
+            reviewService.createReview(review);
             return ResponseEntity.status(HttpStatus.CREATED).body(review);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
