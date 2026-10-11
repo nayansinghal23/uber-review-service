@@ -2,12 +2,14 @@ package com.example.uberreviewservice.controllers;
 
 import com.example.uberreviewservice.adapters.CreateReviewDtoToReviewAdaptor;
 import com.example.uberreviewservice.dtos.CreateReviewDTO;
+import com.example.uberreviewservice.dtos.ReviewDTO;
 import com.example.uberreviewservice.models.Review;
 import com.example.uberreviewservice.services.IReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +25,22 @@ public class ReviewController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Review>> getReviews() {
+    public ResponseEntity<List<ReviewDTO>> getReviews() {
         List<Review> reviews = reviewService.getAllReviews();
-        return ResponseEntity.status(HttpStatus.OK).body(reviews);
+        List<ReviewDTO> reviewDTOs = new ArrayList<>();
+        for (Review review : reviews) {
+            ReviewDTO reviewDTO = ReviewDTO
+                    .builder()
+                    .content(review.getContent())
+                    .id(review.getId())
+                    .rating(review.getRating())
+                    .bookingId(review.getBooking().getId())
+                    .createdAt(review.getCreatedAt())
+                    .updatedAt(review.getUpdatedAt())
+                    .build();
+            reviewDTOs.add(reviewDTO);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(reviewDTOs);
     }
 
     @PostMapping("")
@@ -33,7 +48,16 @@ public class ReviewController {
         try {
             Review review = createReviewDtoToReviewAdaptor.convertDTO(dto);
             reviewService.createReview(review);
-            return ResponseEntity.status(HttpStatus.CREATED).body(review);
+            ReviewDTO reviewDTO = ReviewDTO
+                    .builder()
+                    .content(review.getContent())
+                    .id(review.getId())
+                    .rating(review.getRating())
+                    .bookingId(review.getBooking().getId())
+                    .createdAt(review.getCreatedAt())
+                    .updatedAt(review.getUpdatedAt())
+                    .build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(reviewDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
