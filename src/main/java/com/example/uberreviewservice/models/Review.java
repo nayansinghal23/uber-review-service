@@ -17,6 +17,10 @@ public class Review extends BaseModel {
 
     private Double rating;
 
+    @JoinColumn(nullable = false)
+    @OneToOne
+    private Booking booking;
+
     @Override
     public String toString() {
         return "Review: " + content + " " + rating + " " + super.createdAt;

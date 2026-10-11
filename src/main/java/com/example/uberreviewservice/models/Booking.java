@@ -13,9 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Booking extends BaseModel {
-    @OneToOne
-    private Review review;
-
     @Enumerated(value = EnumType.STRING)
     private BookingStatus bookingStatus;
 
