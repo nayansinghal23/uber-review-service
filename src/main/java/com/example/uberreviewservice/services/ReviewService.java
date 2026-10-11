@@ -10,7 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReviewService implements CommandLineRunner {
@@ -26,27 +25,8 @@ public class ReviewService implements CommandLineRunner {
 
     @Override
     public void run(String @NonNull ... args) throws Exception {
-        /*
-        Review r = Review
-                .builder()
-                .content("Amazing review")
-                .rating(4.5)
-                .build();
-        Booking b = Booking
-                .builder()
-                .startTime(new Date())
-                .endTime(new Date())
-                .bookingStatus(BookingStatus.SCHEDULED)
-                .review(r)
-                .build();
-        reviewRepository.save(r);
-        bookingRepository.save(b);
-        */
-        Optional<Driver> driver = driverRepository.findByIdAndLicenseNumber(1L, "DL121212");
-        if (driver.isPresent()) {
-            System.out.println(driver.get().getName());
-            List<Booking> bookings = driver.get().getBookings();
-            for (Booking booking : bookings) System.out.println(booking.getId());
-        }
+        List<Driver> drivers = driverRepository.findAllByIdIn(List.of(1L, 2L, 3L, 4L, 5L));
+        List<Booking> bookings = bookingRepository.findAllByDriverIn(drivers);
+        for (Booking booking : bookings) System.out.println(booking.getId());
     }
 }
