@@ -3,7 +3,7 @@ package com.example.uberreviewservice.controllers;
 import com.example.uberreviewservice.adapters.CreateReviewDtoToReviewAdaptor;
 import com.example.uberreviewservice.dtos.CreateReviewDTO;
 import com.example.uberreviewservice.dtos.ReviewDTO;
-import com.example.uberreviewservice.models.Review;
+import com.example.uberentityservice.models.Review;
 import com.example.uberreviewservice.services.IReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

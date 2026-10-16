@@ -1,6 +1,6 @@
 package com.example.uberreviewservice.services;
 
-import com.example.uberreviewservice.models.Review;
+import com.example.uberentityservice.models.Review;
 
 import java.util.List;
 import java.util.Optional;
